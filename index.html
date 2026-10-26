@@ -1,0 +1,512 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños Mi Amiga Hermosa! 🎂💖</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e8eaf6 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-cursive {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .font-handwriting {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 182, 193, 0.5);
+            box-shadow: 0 20px 40px rgba(216, 191, 216, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Envelope Styles */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background: linear-gradient(145deg, #f8bbd0, #e1bee7);
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(186, 104, 200, 0.3);
+            cursor: pointer;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        @media (min-width: 640px) {
+            .envelope {
+                width: 420px;
+                height: 280px;
+            }
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(135deg, #f48fb1, #ce93d8);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top center;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+            z-index: 5;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+
+        .envelope-pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 75%;
+            background: linear-gradient(135deg, #f8bbd0 0%, #e1bee7 100%);
+            clip-path: polygon(0 100%, 0 0, 50% 45%, 100% 0, 100% 100%);
+            z-index: 4;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
+        .wax-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #ec407a, #ab47bc);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 6px 15px rgba(216, 27, 96, 0.4), inset 0 2px 5px rgba(255, 255, 255, 0.6);
+            z-index: 6;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .envelope.open .wax-seal {
+            opacity: 0;
+            transform: translate(-50%, -20%) scale(0.5);
+            pointer-events: none;
+        }
+
+        /* Floating Hearts Background Animation */
+        .bg-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Floating spark animation */
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(244, 143, 177, 0.8)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 18px rgba(206, 147, 216, 0.9)); }
+        }
+
+        .glow-pulse {
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbar for letter */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 240, 245, 0.5);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #f48fb1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 relative selection:bg-pink-200">
+
+    <!-- Ambient Sound Elements (Synthesized Web Audio API) -->
+    <div id="particle-container"></div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="w-full max-w-2xl mx-auto flex flex-col items-center justify-center z-10 py-6">
+
+        <!-- 1. ENVELOPE SECTION (BEFORE OPENING) -->
+        <div id="envelope-container" class="flex flex-col items-center justify-center transition-all duration-700 w-full">
+            
+            <!-- Title Header -->
+            <div class="text-center mb-8 animate-fade-in">
+                <span class="bg-pink-100 text-pink-700 text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm tracking-wider uppercase border border-pink-200">
+                    ✨ Un regalo especial para ti ✨
+                </span>
+                <h1 class="text-4xl md:text-5xl font-bold font-cursive text-pink-600 mt-3 drop-shadow-sm">
+                    ¡Tienes una carta!
+                </h1>
+                <p class="text-purple-600 text-sm md:text-base mt-1 font-medium">
+                    Haz clic en el sobre para descubrir la sorpresa 💕
+                </p>
+            </div>
+
+            <!-- Envelope Graphic -->
+            <div class="envelope-wrapper my-4">
+                <div id="envelope" class="envelope glow-pulse flex items-center justify-center" onclick="openLetter()">
+                    <!-- Flap -->
+                    <div class="envelope-flap"></div>
+                    
+                    <!-- Wax Seal / Button Badge -->
+                    <div class="wax-seal">
+                        <i class="fa-solid fa-heart text-2xl animate-pulse"></i>
+                    </div>
+
+                    <!-- Inner Card Preview peek -->
+                    <div class="absolute w-11/12 h-5/6 bg-white/90 rounded-lg shadow-inner top-3 flex flex-col items-center justify-center p-4 text-center border border-pink-200">
+                        <span class="font-handwriting text-2xl text-purple-600 font-bold">Para mi Mejor Amiga 💌</span>
+                        <span class="text-xs text-pink-400 mt-2">26-10 • Un día muy especial</span>
+                    </div>
+
+                    <!-- Front Pocket -->
+                    <div class="envelope-pocket"></div>
+
+                    <!-- Floral Accents on Envelope -->
+                    <div class="absolute bottom-2 left-3 z-10 text-xl opacity-90">🌸</div>
+                    <div class="absolute bottom-2 right-3 z-10 text-xl opacity-90">🌺</div>
+                </div>
+            </div>
+
+            <button onclick="openLetter()" class="mt-8 bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:-translate-y-0.5 active:translate-y-0 text-sm sm:text-base flex items-center gap-2">
+                <i class="fa-solid fa-envelope-open-text"></i>
+                Abrir Carta de Cumpleaños
+            </button>
+        </div>
+
+        <!-- 2. LETTER CONTENT SECTION (AFTER OPENING - INITIALLY HIDDEN) -->
+        <div id="letter-container" class="hidden opacity-0 transform scale-95 transition-all duration-1000 w-full">
+            
+            <!-- Controls Bar Above Card -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4 px-2">
+                <button id="music-btn" onclick="toggleAudio()" class="bg-white/80 hover:bg-white text-purple-700 text-xs sm:text-sm font-semibold px-4 py-2 rounded-full border border-purple-200 shadow-sm flex items-center gap-2 transition">
+                    <i id="music-icon" class="fa-solid fa-music text-pink-500"></i>
+                    <span id="music-text">Música Dulce 🎵</span>
+                </button>
+
+                <button onclick="triggerConfetti()" class="bg-gradient-to-r from-pink-500 to-rose-400 hover:from-pink-600 hover:to-rose-500 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-full shadow-md flex items-center gap-2 transition transform active:scale-95">
+                    <i class="fa-solid fa-heart animate-bounce"></i>
+                    <span>Lluvia de Amor 💕</span>
+                </button>
+            </div>
+
+            <!-- Letter Glassmorphism Card -->
+            <div class="glass-card rounded-3xl p-6 md:p-10 relative overflow-hidden my-2">
+                
+                <!-- Decorative Corner Flowers -->
+                <div class="absolute -top-3 -left-3 text-3xl md:text-4xl pointer-events-none select-none">🌸</div>
+                <div class="absolute -top-3 -right-3 text-3xl md:text-4xl pointer-events-none select-none">🌺</div>
+                <div class="absolute -bottom-3 -left-3 text-3xl md:text-4xl pointer-events-none select-none">🌷</div>
+                <div class="absolute -bottom-3 -right-3 text-3xl md:text-4xl pointer-events-none select-none">💐</div>
+
+                <!-- Subtle Top Ribbon Header -->
+                <div class="text-center pb-6 border-b border-pink-200/80 mb-6">
+                    <span class="inline-block bg-pink-100 text-pink-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-2">
+                        🎉 Feliz Cumpleaños 🎉
+                    </span>
+                    <h2 class="text-3xl md:text-5xl font-bold font-handwriting text-purple-700 drop-shadow-sm">
+                        ¡Para Mi Persona Especial!
+                    </h2>
+                    <p class="text-pink-500 font-medium text-sm md:text-base mt-1 flex items-center justify-center gap-2">
+                        <span>✨ 26 de Octubre</span>
+                        <span>•</span>
+                        <span>¡22 Añitos! 🥳💖 ✨</span>
+                    </p>
+                </div>
+
+                <!-- Letter Body Message -->
+                <div class="space-y-4 text-gray-700 text-base md:text-lg leading-relaxed text-left font-normal max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                    
+                    <p class="first-letter:text-3xl first-letter:font-bold first-letter:text-pink-500">
+                        Hola amiga hoy es un día muy especial porque nace una persona increíble 💐💖🥳.
+                    </p>
+
+                    <p>
+                        Amiga te adoro, estoy agradecida con Dios y la vida por ponerte en mi camino, te agradezco por tu amistad, por tu honestidad, por tu cariño, por abrirme las puertas de tu casa y de tu familia.
+                    </p>
+
+                    <p class="bg-pink-50/60 p-3.5 rounded-2xl border-l-4 border-pink-400 text-gray-800 italic">
+                        Se que ha sido un año difícil para ambas pero no nos hemos rendido, nos caemos y nos levantamos siempre porque somos seres y personas de luz 🙏🏼✨️.
+                    </p>
+
+                    <p>
+                        Amiga te amo y sabes que a veces te toxiqueo pero es porque te quiero un montón y cuido lo que es mío o lo intento a mi manera, se que tengo muchos defectos y te agradezco por aceptarme tal y cual como soy.
+                    </p>
+
+                    <p>
+                        Le pido a Dios que abra siempre tus caminos para todo ámbito: en el amor 💘, dinero 💰, salud y en todo sentido. Eres increíble, nunca cambies🥰🥹💕.
+                    </p>
+
+                    <p class="bg-purple-50/60 p-3.5 rounded-2xl border-l-4 border-purple-400 text-purple-900 font-medium">
+                        Hoy celebró tu día 26-10 ya son 22 añitos jiji qué emoción cada vez un año más, somos puro colágeno ;).
+                    </p>
+
+                    <p class="pt-2 font-semibold text-pink-600 text-lg md:text-xl">
+                        Eso amiga estaré siempre para ti para apoyarte en lo que necesites y te amo mucho 💜
+                    </p>
+                </div>
+
+                <!-- Card Footer Signature -->
+                <div class="mt-8 pt-6 border-t border-pink-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-center sm:text-left">
+                        <p class="text-xs text-gray-500 uppercase tracking-wider">Con todo mi amor y cariño,</p>
+                        <p class="font-handwriting text-2xl md:text-3xl text-purple-700 font-bold">Tu mejor amiga por siempre 💕</p>
+                    </div>
+
+                    <div class="flex items-center gap-2 text-2xl">
+                        <span class="animate-bounce" style="animation-delay: 0s;">👑</span>
+                        <span class="animate-bounce" style="animation-delay: 0.2s;">✨</span>
+                        <span class="animate-bounce" style="animation-delay: 0.4s;">🎂</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Shared Action / Replay -->
+            <div class="text-center mt-6">
+                <button onclick="location.reload()" class="text-xs text-purple-600 hover:text-purple-800 font-semibold underline flex items-center justify-center gap-1 mx-auto transition">
+                    <i class="fa-solid fa-rotate-right"></i> Volver a guardar en el sobre
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer Tag -->
+    <footer class="mt-auto py-4 text-center text-xs text-pink-400 font-medium z-10">
+        Hecho con todo el amor del mundo 💖 • 2026
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // 1. Generate Floating Particles (Hearts, Stars, Flowers)
+        const symbols = ['💖', '🌸', '✨', '💜', '🌷', '💕', '🌺', '⭐'];
+        const particleContainer = document.getElementById('particle-container');
+
+        function createParticles() {
+            const count = 20;
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'bg-particle';
+                particle.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                
+                // Random position & speed
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.fontSize = (Math.random() * 16 + 12) + 'px';
+                particle.style.animationDuration = (Math.random() * 8 + 6) + 's';
+                particle.style.animationDelay = (Math.random() * 5) + 's';
+                
+                particleContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // 2. Open Letter Animation
+        let isOpen = false;
+        function openLetter() {
+            if (isOpen) return;
+            isOpen = true;
+
+            const envelope = document.getElementById('envelope');
+            const envelopeContainer = document.getElementById('envelope-container');
+            const letterContainer = document.getElementById('letter-container');
+
+            // Add open class to animate flap and wax seal
+            envelope.classList.add('open');
+
+            // Trigger celebratory confetti on opening
+            setTimeout(() => {
+                triggerConfetti();
+            }, 500);
+
+            // Transition elements
+            setTimeout(() => {
+                envelopeContainer.classList.add('opacity-0', 'scale-90');
+                
+                setTimeout(() => {
+                    envelopeContainer.classList.add('hidden');
+                    letterContainer.classList.remove('hidden');
+                    
+                    // Fade in letter
+                    setTimeout(() => {
+                        letterContainer.classList.remove('opacity-0', 'scale-95');
+                        letterContainer.classList.add('opacity-100', 'scale-100');
+                    }, 50);
+                }, 500);
+            }, 900);
+
+            // Start soft melody synth ambient
+            startMelody();
+        }
+
+        // 3. Heart & Flowers Confetti Effect
+        function triggerConfetti() {
+            const count = 200;
+            const defaults = {
+                origin: { y: 0.7 }
+            };
+
+            function fire(particleRatio, opts) {
+                confetti({
+                    ...defaults,
+                    ...opts,
+                    particleCount: Math.floor(count * particleRatio)
+                });
+            }
+
+            fire(0.25, {
+                spread: 26,
+                startVelocity: 55,
+                colors: ['#ffb6c1', '#ff69b4', '#e6e6fa']
+            });
+            fire(0.2, {
+                spread: 60,
+                colors: ['#ba68c8', '#f48fb1', '#ffffff']
+            });
+            fire(0.35, {
+                spread: 100,
+                decay: 0.91,
+                scalar: 1.2,
+                colors: ['#ff1493', '#d8bfd8', '#ffc0cb']
+            });
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 25,
+                decay: 0.92,
+                colors: ['#e1bee7', '#f8bbd0']
+            });
+        }
+
+        // 4. Soft Ambient Synthesizer Music (No external URLs required)
+        let audioCtx = null;
+        let isPlaying = false;
+        let musicInterval = null;
+
+        function playNote(freq, duration = 0.5) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                // Soft envelope for a chime / music box effect
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.log("Audio not supported or blocked", e);
+            }
+        }
+
+        // Happy Birthday / Sweet Melody Frequencies
+        const melody = [
+            261.63, 261.63, 293.66, 261.63, 349.23, 329.63, // Happy Birthday line
+            261.63, 261.63, 293.66, 261.63, 392.00, 349.23,
+            261.63, 261.63, 523.25, 440.00, 349.23, 329.63, 293.66,
+            466.16, 466.16, 440.00, 349.23, 392.00, 349.23
+        ];
+
+        let noteIdx = 0;
+        function startMelody() {
+            if (isPlaying) return;
+            
+            // Initialize Web Audio API on interaction
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            isPlaying = true;
+            document.getElementById('music-text').innerText = "Música Activa ✨";
+            document.getElementById('music-icon').className = "fa-solid fa-volume-high text-pink-500 animate-pulse";
+
+            musicInterval = setInterval(() => {
+                playNote(melody[noteIdx], 0.8);
+                noteIdx = (noteIdx + 1) % melody.length;
+            }, 450);
+        }
+
+        function stopMelody() {
+            if (musicInterval) clearInterval(musicInterval);
+            isPlaying = false;
+            document.getElementById('music-text').innerText = "Música Dulce 🎵";
+            document.getElementById('music-icon').className = "fa-solid fa-music text-pink-500";
+        }
+
+        function toggleAudio() {
+            if (isPlaying) {
+                stopMelody();
+            } else {
+                startMelody();
+            }
+        }
+    </script>
+</body>
+
+
+
